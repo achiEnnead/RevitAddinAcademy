@@ -9,6 +9,15 @@
     <VendorId>com.typepad.thebuildingcoder</VendorId>
     <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>
+	<AddIn Type="Command">
+		<Text>Delete Backup Files</Text>
+		<Description>Deletes Backup Revit Project and Family Files</Description>
+		<Assembly>RevitAddinAcademy.dll</Assembly>
+		<FullClassName>RevitAddinAcademy.cmdDeleteBackup</FullClassName>
+		<ClientId>E3D2DDC5-5A3D-48E3-977E-2A86BAB1AB41</ClientId>
+		<VendorId>com.typepad.thebuildingcoder</VendorId>
+		<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+	</AddIn>
   <AddIn Type="Application">
     <Name>Application RevitAddinAcademy</Name>
     <Assembly>RevitAddinAcademy.dll</Assembly>
