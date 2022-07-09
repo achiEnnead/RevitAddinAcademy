@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace RevitAddinAcademy
 {
     [Transaction(TransactionMode.Manual)]
-    public class Command01Challenge : IExternalCommand
+    public class cmdSession01Challenge : IExternalCommand
     {
         public Result Execute(
           ExternalCommandData commandData,
