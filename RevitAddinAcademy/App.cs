@@ -14,13 +14,12 @@ namespace RevitAddinAcademy
     {
         public Result OnStartup(UIControlledApplication a)
         {
-            TaskDialog.Show("Hello", "Welcome to Revit AddIn Academy");
+            
             return Result.Succeeded;
         }
 
         public Result OnShutdown(UIControlledApplication a)
         {
-            TaskDialog.Show("Good bye!", "I miss you!");
             return Result.Succeeded;
         }
     }
