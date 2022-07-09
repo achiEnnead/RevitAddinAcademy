@@ -7,6 +7,7 @@ using Autodesk.Revit.UI.Selection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Excel = Microsoft.Office.Interop.Excel;
 
 #endregion
 
@@ -25,7 +26,19 @@ namespace RevitAddinAcademy
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            TaskDialog.Show("Hello", "This is my first command add-in");
+            string excelFile = @"C:\temp\Session02_Combination Sheet List.xlsx";
+
+            Excel.Application excelApp = new Excel.Application();
+            Excel.Workbook excelWb = excelApp.Workbooks.Open(excelFile);
+            Excel.Worksheet excelWs = excelWb.Worksheets.Item[1];
+
+            Excel.Range excelRng = excelWs.UsedRange;
+            int rowCount = excelRng.Rows.Count;
+
+            //do stuff in excel
+
+            excelWb.Close();
+            excelApp.Quit();
 
             return Result.Succeeded;
         }
