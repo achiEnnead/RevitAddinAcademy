@@ -28,57 +28,66 @@ namespace RevitAddinAcademy
 
             string excelFile = @"C:\temp\Session02_Challenge.xlsx";
 
-            //open excel
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Workbook excelWb = excelApp.Workbooks.Open(excelFile);
-            Excel.Worksheet excelWs1 = excelWb.Worksheets.Item[1];
-            Excel.Worksheet excelWs2 = excelWb.Worksheets.Item[2];
-
-            Excel.Range excelRng1 = excelWs1.UsedRange;
-            Excel.Range excelRng2 = excelWs2.UsedRange;
-
-            int rowCountLevels = excelRng2.Rows.Count;
-            int rowCountSheets = excelRng2.Rows.Count;
-
-            using(Transaction t = new Transaction(doc))
+            try
             {
-                t.Start("Create Levels and Sheets");
+                //open excel
+                Excel.Application excelApp = new Excel.Application();
+                Excel.Workbook excelWb = excelApp.Workbooks.Open(excelFile);
+                Excel.Worksheet excelWs1 = excelWb.Worksheets.Item[1];
+                Excel.Worksheet excelWs2 = excelWb.Worksheets.Item[2];
 
-                for (int i = 2; i < rowCountLevels; i++)
+                Excel.Range excelRng1 = excelWs1.UsedRange;
+                Excel.Range excelRng2 = excelWs2.UsedRange;
+
+                int rowCountLevels = excelRng2.Rows.Count;
+                int rowCountSheets = excelRng2.Rows.Count;
+
+                using (Transaction t = new Transaction(doc))
                 {
-                    Excel.Range levelData1 = excelWs1.Cells[i, 1];
-                    Excel.Range levelData2 = excelWs1.Cells[i, 2];
+                    t.Start("Create Levels and Sheets");
 
-                    string levelName = levelData1.Value.ToString();
-                    double levelElev = levelData2.Value;
+                    for (int i = 2; i < rowCountLevels; i++)
+                    {
+                        Excel.Range levelData1 = excelWs1.Cells[i, 1];
+                        Excel.Range levelData2 = excelWs1.Cells[i, 2];
 
-                    Level newLevel = Level.Create(doc, levelElev);
-                    newLevel.Name = levelName;
+                        string levelName = levelData1.Value.ToString();
+                        double levelElev = levelData2.Value;
+
+                        Level newLevel = Level.Create(doc, levelElev);
+                        newLevel.Name = levelName;
+                    }
+
+                    FilteredElementCollector collector = new FilteredElementCollector(doc);
+                    collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+                    collector.WhereElementIsElementType();
+
+                    for (int j = 2; j < rowCountSheets; j++)
+                    {
+                        Excel.Range sheetData1 = excelWs1.Cells[j, 1];
+                        Excel.Range sheetData2 = excelWs1.Cells[j, 2];
+
+                        string sheetNum = sheetData1.Value.ToString();
+                        string sheetName = sheetData2.Value.ToString();
+
+                        ViewSheet newSheet = ViewSheet.Create(doc, collector.FirstElementId());
+                        newSheet.SheetNumber = sheetNum;
+                        newSheet.Name = sheetName;
+                    }
+
+
+                    t.Commit();
                 }
 
-                FilteredElementCollector collector = new FilteredElementCollector(doc);
-                collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
-                collector.WhereElementIsElementType();
+                excelWb.Close();
+                excelApp.Quit();
+            }
+            catch(Exception ex)
+            {
 
-                for (int j = 2; j < rowCountSheets; j++)
-                {
-                    Excel.Range sheetData1 = excelWs1.Cells[j, 1];
-                    Excel.Range sheetData2 = excelWs1.Cells[j, 2];
-
-                    string sheetNum = sheetData1.Value.ToString();
-                    string sheetName = sheetData2.Value.ToString();
-
-                    ViewSheet newSheet = ViewSheet.Create(doc, collector.FirstElementId());
-                    newSheet.SheetNumber = sheetNum;
-                    newSheet.Name = sheetName;
-                }
-
-
-                t.Commit();
+                Debug.Print(ex.Message);
             }
 
-            excelWb.Close();
-            excelApp.Quit();
 
 
             return Result.Succeeded;
