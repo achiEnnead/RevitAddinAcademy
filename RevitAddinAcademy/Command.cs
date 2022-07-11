@@ -36,6 +36,41 @@ namespace RevitAddinAcademy
             int rowCount = excelRng.Rows.Count;
 
             //do stuff in excel
+            List<string[]> dataList = new List<string[]> ();
+
+            for (int i = 1; i < rowCount; i++)
+            {
+                Excel.Range cell1 = excelWs.Cells[i, 1];
+                Excel.Range cell2 = excelWs.Cells[i, 2];
+
+                string data1 = cell1.Value.ToString();
+                string data2 = cell2.Value.ToString();
+
+                string[] dataArray = new string[2];
+                dataArray[0] = data1;
+                dataArray[1] = data2;
+
+                dataList.Add(dataArray);
+            }
+
+            using (Transaction t = new Transaction(doc))
+            {
+                t.Start("Create some Revit Stuff");
+
+                Level curLevel = Level.Create(doc, 100);
+
+                FilteredElementCollector collector = new FilteredElementCollector(doc);
+                collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+                collector.WhereElementIsElementType();
+
+                ViewSheet curSheet = ViewSheet.Create(doc, collector.FirstElementId());
+                curSheet.SheetNumber = "A1010101";
+                curSheet.Name = "New Sheet";
+
+                t.Commit();
+                t.Dispose();
+            }
+
 
             excelWb.Close();
             excelApp.Quit();
