@@ -28,56 +28,50 @@ namespace RevitAddinAcademy
 
             string excelFile = @"C:\temp\Session02_Challenge.xlsx";
 
+            //open excel
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook excelWb = excelApp.Workbooks.Open(excelFile);
-            Excel.Worksheet excelWsLevels = excelWb.Worksheets.Item[1];
-            Excel.Worksheet excelWsSheets = excelWb.Worksheets.Item[2];
+            Excel.Worksheet excelWs1 = excelWb.Worksheets.Item[1];
+            Excel.Worksheet excelWs2 = excelWb.Worksheets.Item[2];
 
-            Excel.Range rngLevels = excelWsLevels.UsedRange;
-            int rowCountLevels = rngLevels.Rows.Count;
+            Excel.Range excelRng1 = excelWs1.UsedRange;
+            Excel.Range excelRng2 = excelWs2.UsedRange;
 
-            Excel.Range rngSheets = excelWsSheets.UsedRange;
-            int rowCountSheets = rngSheets.Rows.Count;
-
-            List<string[]> dataListLevels = new List<string[]>();
-            List<string[]> dataListSheets = new List<string[]>();
-
-            for (int i = 1; i < rowCountLevels; i++)
-            {
-                Excel.Range cell1 = excelWsLevels.Cells[i, 1];
-                Excel.Range cell2 = excelWsLevels.Cells[i, 2];
-
-                string data1 = cell1.Value.ToString();
-                string data2 = cell1.Value.ToString();
-
-                string[] dataArrayLevels = new string[3];
-                dataArrayLevels[0] = data1;
-                dataArrayLevels[1] = data2;
-            }
-
-            for (int i = 1; i < rowCountSheets; i++)
-            {
-                Excel.Range cell1 = excelWsLevels.Cells[i, 1];
-                Excel.Range cell2 = excelWsLevels.Cells[i, 2];
-
-                string data1 = cell1.Value.ToString();
-                string data2 = cell1.Value.ToString();
-       
-                string[] dataArraySheets = new string[2];
-                dataArraySheets[0] = data1;
-                dataArraySheets[1] = data2;
-             }
+            int rowCountLevels = excelRng2.Rows.Count;
+            int rowCountSheets = excelRng2.Rows.Count;
 
             using(Transaction t = new Transaction(doc))
             {
-                t.Start("Create Levels and Sheets");    
+                t.Start("Create Levels and Sheets");
 
-                foreach (int i in dataListLevels)
+                for (int i = 2; i < rowCountLevels; i++)
                 {
-                    Level curLevel = Level.Create(doc, i[1]);
-                    curLevel.Name = i[0];
+                    Excel.Range levelData1 = excelWs1.Cells[i, 1];
+                    Excel.Range levelData2 = excelWs1.Cells[i, 2];
+
+                    string levelName = levelData1.Value.ToString();
+                    double levelElev = levelData2.Value;
+
+                    Level newLevel = Level.Create(doc, levelElev);
+                    newLevel.Name = levelName;
                 }
 
+                FilteredElementCollector collector = new FilteredElementCollector(doc);
+                collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+                collector.WhereElementIsElementType();
+
+                for (int j = 2; j < rowCountSheets; j++)
+                {
+                    Excel.Range sheetData1 = excelWs1.Cells[j, 1];
+                    Excel.Range sheetData2 = excelWs1.Cells[j, 2];
+
+                    string sheetNum = sheetData1.Value.ToString();
+                    string sheetName = sheetData2.Value.ToString();
+
+                    ViewSheet newSheet = ViewSheet.Create(doc, collector.FirstElementId());
+                    newSheet.SheetNumber = sheetNum;
+                    newSheet.Name = sheetName;
+                }
 
 
                 t.Commit();
