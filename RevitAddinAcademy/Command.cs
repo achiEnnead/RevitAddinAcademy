@@ -81,12 +81,45 @@ namespace RevitAddinAcademy
                 }
             }
 
+            FilteredElementCollector collector2 = new FilteredElementCollector(doc);
+            collector2.OfCategory(BuiltInCategory.OST_TitleBlocks);
+            collector2.WhereElementIsElementType();
+
             using(Transaction t = new Transaction(doc))
             {
+                t.Start("Make some views");
                 Level newLevel = Level.Create(doc, 100);
                 ViewPlan curPlan = ViewPlan.Create(doc, curVFT.Id, newLevel.Id);
                 ViewPlan curRCP = ViewPlan.Create(doc, curRCPVFT.Id, newLevel.Id);
                 curRCP.Name = curRCP.Name + " RCP";
+
+                View existingView = GetViewByName(doc, "Level 1");
+                ViewSheet newSheet = ViewSheet.Create(doc, collector2.FirstElementId());
+
+                if(existingView != null)
+                {
+                    Viewport newVP = Viewport.Create(doc, newSheet.Id, curPlan.Id, new XYZ(0, 0, 0));
+                }
+                else
+                {
+                    TaskDialog.Show("Error", "Could not find view");
+                }
+                
+
+                newSheet.Name = "Test Sheet";
+                newSheet.SheetNumber = "A10010";
+
+
+                foreach(Parameter curParam in newSheet.Parameters)
+                {
+                    if(curParam.Definition.Name == "Drawn By")
+                    {
+                        curParam.Set("MW");
+                    }
+                }
+
+                t.Commit();
+                //t.Dispose();
 
             }
 
@@ -96,6 +129,21 @@ namespace RevitAddinAcademy
             return Result.Succeeded;
         }
 
+        internal View GetViewByName(Document doc, string viewName)
+        {
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfClass(typeof(View));
+
+            foreach(View curView in collector)
+            {
+                if(curView.Name == viewName)
+                {
+                    return curView;
+                }
+            }
+
+            return null;
+        }
         internal struct TestStruct
         {
             public string Name;
