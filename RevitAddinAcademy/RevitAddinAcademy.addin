@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
-  <!--<AddIn Type="Command">
+  <AddIn Type="Command">
     <Text>Command RevitAddinAcademy</Text>
     <Description>Some description for RevitAddinAcademy</Description>
     <Assembly>RevitAddinAcademy.dll</Assembly>
@@ -8,7 +8,7 @@
     <ClientId>33486e9b-e579-44ac-b175-adbdf7cf2f2c</ClientId>
     <VendorId>com.typepad.thebuildingcoder</VendorId>
     <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
-  </AddIn>-->
+  </AddIn>
    <AddIn Type="Command">
     <Text>Fizzbuzz</Text>
     <Description>FizzBuzz Session 01 Challenge</Description>
