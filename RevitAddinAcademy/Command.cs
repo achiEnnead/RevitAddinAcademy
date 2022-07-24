@@ -34,6 +34,7 @@ namespace RevitAddinAcademy
             List<CurveElement> curveList = new List<CurveElement>();
 
             WallType curWallType = GetWallTypeByName(doc, @"Generic - 8""");
+            WallType curStorefrontType = GetWallTypeByName(doc, "Storefront");
             Level curLevel = GetLevelByName(doc, "Level 1");
             DuctType curDuctType = GetDuctTypeByName(doc, "Default");
             PipeType curPipeType = GetPipeTypeByName(doc, "Default");
@@ -46,38 +47,39 @@ namespace RevitAddinAcademy
 
                 foreach (Element elem in pickList)
                 {
-                    if (elem is ModelCurve)
+                    if (elem is ModelLine)
                     {
-                        ModelCurve mCurve = (ModelCurve)elem;
+                        ModelLine mCurve = (ModelLine)elem;
                         curveList.Add(mCurve);
 
                         GraphicsStyle curGS = mCurve.LineStyle as GraphicsStyle;
 
                         Curve curCurve = mCurve.GeometryCurve;
-                        //XYZ startPoint = new XYZ();
-                        //XYZ endPoint = new XYZ();
+                        XYZ startPoint = curCurve.GetEndPoint(0);
+                        XYZ endPoint = curCurve.GetEndPoint(1);
 
-                        try
-                        {
-                            XYZ startPoint = curCurve.GetEndPoint(0);
-                            XYZ endPoint = curCurve.GetEndPoint(1);
-                            if(startPoint != null)
-                            {
-                                return startPoint;
-                                return endPoint;
-                            }
+                        //try
+                        //{
+                        //    XYZ startPoint = curCurve.GetEndPoint(0);
+                        //    XYZ endPoint = curCurve.GetEndPoint(1);
+                        //    if(startPoint != null)
+                        //    {
+                        //        return startPoint;
+                        //        return endPoint;
+                        //    }
 
-                        }
-                        catch
-                        {
-                            TaskDialog.Show("Error", $"Curve {curCurve.Id} has no start or end point");
-                        }
+                        //}
+                        //catch
+                        //{
+                        //    TaskDialog.Show("Error", $"Curve {curCurve.Id} has no start or end point");
+                        //}
 
 
 
                         switch (curGS.Name)
                         {
                             case "A-GLAZ":
+                                Wall newStorefrontWall = Wall.Create(doc, curCurve, curStorefrontType.Id, curLevel.Id, 15, 0, false, false);
                                 break;
                             case "A-WALL":
                                 Wall newWall = Wall.Create(doc, curCurve, curWallType.Id, curLevel.Id, 15, 0, false, false);
