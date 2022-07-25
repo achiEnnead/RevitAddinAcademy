@@ -29,6 +29,8 @@ namespace RevitAddinAcademy
             //create list for log file & list of file sizes
             List<string> deletedFileLog = new List<string>();
             deletedFileLog.Add("The following backup files have been deleted:");
+            deletedFileLog.Add("Placeholder");
+
             //List<long> deletedFilesSizes = new List<long>();
             long deletedFileSumSize = 0;
 
@@ -75,33 +77,33 @@ namespace RevitAddinAcademy
                 string reportSumUnit = "";
                 long finalFileSumSize = 0;
 
-                if(deletedFileSumSize > 1024000000)
+                if (deletedFileSumSize > 1024000000)
                 {
-                    reportSumUnit = "GB";
+                    reportSumUnit = " GB";
                     finalFileSumSize = deletedFileSumSize / 1024000000;
                 }
-                if(deletedFileSumSize > 1024000)
+                else if (deletedFileSumSize > 1024000)
                 {
-                    reportSumUnit = "MB";
-                    finalFileSumSize = deletedFileSumSize / 1024000;                       
+                    reportSumUnit = " MB";
+                    finalFileSumSize = deletedFileSumSize / 1024000;
                 }
-                if(deletedFileSumSize > 1024)
+                else if (deletedFileSumSize > 1024)
                 {
-                    reportSumUnit = "KB";
+                    reportSumUnit = " KB";
                     finalFileSumSize = deletedFileSumSize / 1024;
                 }
                 else
                 {
-                    reportSumUnit = "Bytes";
+                    reportSumUnit = " Bytes";
                     finalFileSumSize = deletedFileSumSize;
                 }
 
 
-                
+
                 // output log file
                 if (counter > 0)
                 {
-                    deletedFileLog.Add("Total file size saved: " + finalFileSumSize.ToString() + reportSumUnit);
+                    deletedFileLog[1] = ("Total file size saved: " + finalFileSumSize.ToString() + reportSumUnit);
                     logPath = WriteListToTxt(deletedFileLog, directory);
                 }
             }
@@ -132,18 +134,7 @@ namespace RevitAddinAcademy
             return fullPath;
         }
 
-       //internal List<int> ConvertLongToInt(List<long> longList)
-       // {
-       //     List<int> reducedFilesSizes = new List<int>();
-       //     foreach (long longItem in longList)
-       //     {
-       //         long longReduced = longItem / 1000000;
-       //         int intOutput = (int)longReduced;
-       //         reducedFilesSizes.Add(intOutput);
-       //     }
 
-       //     return reducedFilesSizes;       
-        //}
 
     }
 }
