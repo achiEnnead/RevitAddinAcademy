@@ -75,20 +75,20 @@ namespace RevitAddinAcademy
                 string reportSumUnit = "";
                 long finalFileSumSize = 0;
 
-                if(deletedFileSumSize > 1000000000)
+                if(deletedFileSumSize > 1024000000)
                 {
                     reportSumUnit = "GB";
-                    finalFileSumSize = deletedFileSumSize / 1000000000;
+                    finalFileSumSize = deletedFileSumSize / 1024000000;
                 }
-                if(deletedFileSumSize > 1000000)
+                if(deletedFileSumSize > 1024000)
                 {
                     reportSumUnit = "MB";
-                    finalFileSumSize = deletedFileSumSize / 1000000;                       
+                    finalFileSumSize = deletedFileSumSize / 1024000;                       
                 }
-                if(deletedFileSumSize > 1000)
+                if(deletedFileSumSize > 1024)
                 {
                     reportSumUnit = "KB";
-                    finalFileSumSize = deletedFileSumSize / 1000;
+                    finalFileSumSize = deletedFileSumSize / 1024;
                 }
                 else
                 {
