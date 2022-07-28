@@ -38,7 +38,7 @@ namespace RevitAddinAcademy
             selectFolder.ShowNewFolderButton = false;
 
             //open folder dialog and only run code if a folder is selected
-            if(selectFolder.ShowDialog() == DialogResult.OK)
+            if (selectFolder.ShowDialog() == DialogResult.OK)
             {
                 //get selected folder path
                 string directory = selectFolder.SelectedPath;
@@ -47,14 +47,14 @@ namespace RevitAddinAcademy
                 string[] files = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
 
                 //loop through files
-                foreach(string file in files)
+                foreach (string file in files)
                 {
                     //check if file is a revit file
-                    if(Path.GetExtension(file) == ".rvt" || Path.GetExtension(file) == ".rfa")
+                    if (Path.GetExtension(file) == ".rvt" || Path.GetExtension(file) == ".rfa")
                     {
                         string checkString = file.Substring(file.Length - 9, 9);
 
-                        if(checkString.Contains(".00") == true)
+                        if (checkString.Contains(".00") == true)
                         {
                             //create variable FileInfo to get file size, get file size and convert to string
                             FileInfo fi = new FileInfo(file);
@@ -106,20 +106,26 @@ namespace RevitAddinAcademy
                     deletedFileLog[1] = ("Total file size saved: " + finalFileSumSize.ToString() + reportSumUnit);
                     logPath = WriteListToTxt(deletedFileLog, directory);
                 }
+
+                // alert user
+                TaskDialog td = new TaskDialog("Complete");
+                td.MainInstruction = "Deleted" + counter.ToString() + "backup files.";
+                td.AddCommandLink(TaskDialogCommandLinkId.CommandLink1, "Click to view log file");
+                td.CommonButtons = TaskDialogCommonButtons.Ok;
+
+                TaskDialogResult result = td.Show();
+
+                if (result == TaskDialogResult.CommandLink1)
+                {
+                    Process.Start(logPath);
+                }
             }
-
-            // alert user
-            TaskDialog td = new TaskDialog("Complete");
-            td.MainInstruction = "Deleted" + counter.ToString() + "backup files.";
-            td.AddCommandLink(TaskDialogCommandLinkId.CommandLink1, "Click to view log file");
-            td.CommonButtons = TaskDialogCommonButtons.Ok;
-
-            TaskDialogResult result = td.Show();
-
-            if(result == TaskDialogResult.CommandLink1)
+            else
             {
-                Process.Start(logPath);
+
             }
+
+
            
             return Result.Succeeded;
         }
