@@ -9,7 +9,7 @@
     <VendorId>com.typepad.thebuildingcoder</VendorId>
     <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>-->
-   <AddIn Type="Command">
+   <!--<AddIn Type="Command">
     <Text>Fizzbuzz</Text>
     <Description>FizzBuzz Session 01 Challenge</Description>
     <Assembly>RevitAddinAcademy.dll</Assembly>
@@ -17,8 +17,8 @@
     <ClientId>DBC6955D-C836-4323-AC2C-AA9E513DE24C</ClientId>
     <VendorId>com.typepad.thebuildingcoder</VendorId>
     <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
-  </AddIn>
-	<AddIn Type="Command">
+  </AddIn>-->
+    <AddIn Type="Command">
 		<Text>Delete Backup Files</Text>
 		<Description>Deletes Backup Revit Project and Family Files</Description>
 		<Assembly>RevitAddinAcademy.dll</Assembly>
@@ -26,7 +26,7 @@
 		<ClientId>E3D2DDC5-5A3D-48E3-977E-2A86BAB1AB41</ClientId>
 		<VendorId>com.typepad.thebuildingcoder</VendorId>
 		<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
-	</AddIn>
+    </AddIn>
   <AddIn Type="Application">
     <Name>Application RevitAddinAcademy</Name>
     <Assembly>RevitAddinAcademy.dll</Assembly>
